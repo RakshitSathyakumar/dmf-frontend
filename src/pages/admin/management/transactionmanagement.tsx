@@ -1,60 +1,77 @@
 import { FaTrash } from "react-icons/fa";
-import { Link } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Link, Navigate, useNavigate, useParams } from "react-router-dom";
 import AdminSidebar from "../../../components/admin/AdminSidebar";
-import { OrderItem } from "../../../models/types";
+import {
+  useDeleteOrderMutation,
+  useOrderDetailsQuery,
+  useUpdateOrderMutation,
+} from "../../../redux/api/orderAPI";
 import { server } from "../../../redux/store";
+import { UserReducerInitialState } from "../../../types/reducer-types";
+import { Order, OrderItem } from "../../../types/types";
+import { responseToast } from "../../../utils/feature";
 
-const img =
-  "https://images.unsplash.com/photo-1542291026-7eec264c27ff?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8c2hvZXN8ZW58MHx8MHx8&w=1000&q=804";
-
-const orderItems: OrderItem[] = [
-  {
-    name: "Puma Shoes",
-    photo: img,
-    id: "asdsaasdas",
-    quantity: 4,
-    price: 2000,
+const defaultData: Order = {
+  shippingInfo: {
+    address: "",
+    city: "",
+    state: "",
+    country: "",
+    pinCode: "",
   },
-];
+  status: "",
+  subtotal: 0,
+  discount: 0,
+  shippingCharges: 0,
+  tax: 0,
+  total: 0,
+  orderItems: [],
+  user: { name: "", _id: "" },
+  _id: "",
+};
 
 const TransactionManagement = () => {
-  const [order, setOrder] = useState({
-    name: "Puma Shoes",
-    address: "77 black street",
-    city: "Neyword",
-    state: "Nevada",
-    country: "US",
-    pinCode: 242433,
-    status: "Processing",
-    subtotal: 4000,
-    discount: 1200,
-    shippingCharges: 0,
-    tax: 200,
-    total: 4000 + 200 + 0 - 1200,
-    orderItems,
-  });
+  const { user } = useSelector(
+    (state: { userReducer: UserReducerInitialState }) => state.userReducer
+  );
+
+  const params = useParams();
+  const navigate = useNavigate();
+  const { isLoading, isError, error, data } = useOrderDetailsQuery(params.id!);
 
   const {
-    name,
-    address,
-    city,
-    country,
-    state,
-    pinCode,
-    subtotal,
-    shippingCharges,
-    tax,
-    discount,
-    total,
+    shippingInfo: { address, city, state, country, pinCode },
+    orderItems,
+    user: { name },
     status,
-  } = order;
+    tax,
+    subtotal,
+    total,
+    discount,
+    shippingCharges,
+  } = data?.order || defaultData;
 
-  const updateHandler = (): void => {
-    setOrder((prev) => ({
-      ...prev,
-      status: "Shipped",
-    }));
+  const [updateOrder] = useUpdateOrderMutation();
+  const [deleteOrder] = useDeleteOrderMutation();
+
+  const updateHandler = async () => {
+    const res = await updateOrder({
+      userId: user?._id!,
+      orderId: data?.order._id!,
+    });
+    responseToast(res, navigate, "/admin/transaction");
   };
+
+  const deleteHandler = async () => {
+    const res = await deleteOrder({
+      userId: user?._id!,
+      orderId: data?.order._id!,
+    });
+    responseToast(res, navigate, "/admin/transaction");
+  };
+
+  if (isError) return <Navigate to={"/404"} />;
 
   return (
     <div className="admin-container">

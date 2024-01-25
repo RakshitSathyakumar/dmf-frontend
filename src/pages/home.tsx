@@ -1,8 +1,25 @@
+import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
 import { Link } from "react-router-dom";
+import { Skeleton } from "../components/loader";
 import { ProductCard } from "../components/product-card";
+import { useLatestProductsQuery } from "../redux/api/productAPI";
+import { addToCart } from "../redux/reducer/cartReducer";
+import { CartItem } from "../types/types";
 
 const Home = () => {
-  const addToCartHandler = () => {};
+  const { data, isLoading, isError } = useLatestProductsQuery("");
+
+  const dispatch = useDispatch();
+
+  const addToCartHandler = (cartItems: CartItem) => {
+    if (cartItems.stock < 1) {
+      return toast.error("Out of Stock!!");
+    }
+    dispatch(addToCart(cartItems));
+    toast.success("Item Added!")
+  };
+  if (isError) toast.error("Cannot Fetch from the server");
   return (
     <div className="home">
       <section> </section>
@@ -13,14 +30,21 @@ const Home = () => {
         </Link>
       </h1>
       <main>
-        <ProductCard
-          name="hi"
-          photo="https://static1.srcdn.com/wordpress/wp-content/uploads/2020/07/The-Office-Michael-Scott-Age.jpg"
-          price={32}
-          stock={2}
-          handler={addToCartHandler}
-          productId="21"
-        />
+        {isLoading ? (
+          <Skeleton width="80vw" />
+        ) : (
+          data?.products.map((i) => (
+            <ProductCard
+              name={i.name}
+              photo={i.photo}
+              price={i.price}
+              stock={i.stock}
+              handler={addToCartHandler}
+              productId={i._id}
+              key={i._id}
+            />
+          ))
+        )}
       </main>
     </div>
   );

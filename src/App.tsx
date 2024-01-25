@@ -1,7 +1,16 @@
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import { Suspense, lazy } from "react";
-import Loarder from "./components/loader";
+import { onAuthStateChanged } from "firebase/auth";
+import { Suspense, lazy, useEffect } from "react";
+import { Toaster } from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
 import Header from "./components/header";
+import Loarder from "./components/loader";
+import ProtectedRoute from "./components/protected-routes";
+import { auth } from "./firebase";
+import NotFound from "./pages/not-found";
+import { getUser } from "./redux/api/userAPI";
+import { userExist, userNotExist } from "./redux/reducer/userReducer";
+import { UserReducerInitialState } from "./types/reducer-types";
 
 const Home = lazy(() => import("./pages/home"));
 const Search = lazy(() => import("./pages/search"));
@@ -10,6 +19,7 @@ const Shipping = lazy(() => import("./pages/shipping"));
 const Login = lazy(() => import("./pages/login"));
 const Orders = lazy(() => import("./pages/orders"));
 const OrderDetails = lazy(() => import("./pages/order-details"));
+const Checkout = lazy(() => import("./pages/checkout"));
 
 // admin routes
 const Dashboard = lazy(() => import("./pages/admin/dashboard"));
@@ -31,31 +41,60 @@ const TransactionManagement = lazy(
 );
 
 const App = () => {
-  return (
+  const { user, loading } = useSelector(
+    (state: { userReducer: UserReducerInitialState }) => state.userReducer
+  );
+  const dispatch = useDispatch();
+  useEffect(() => {
+    onAuthStateChanged(auth, async (user) => {
+      if (user) {
+        console.log("Logged In!");
+        const data = await getUser(user.uid);
+        dispatch(userExist(data.user));
+      } else {
+        console.log("Not Logged in!");
+        dispatch(userNotExist());
+      }
+    });
+  }, []);
+
+  return loading ? (
+    <Loarder />
+  ) : (
     <Router>
-      <Header />
+      <Header user={user} />
       <Suspense fallback={<Loarder />}>
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/search" element={<Search />} />
           <Route path="/cart" element={<Cart />} />
           <Route>
-            <Route path="/login" element={<Login />} />
+            <Route
+              path="/login"
+              element={
+                <ProtectedRoute isAuthenticated={user ? false : true}>
+                  <Login />
+                </ProtectedRoute>
+              }
+            />
           </Route>
-          <Route>
+          <Route
+            element={<ProtectedRoute isAuthenticated={user ? true : false} />}
+          >
             <Route path="/shipping" element={<Shipping />} />
             <Route path="/orders" element={<Orders />} />
             <Route path="/orders/:id" element={<OrderDetails />} />
+            <Route path="/pay" element={<Checkout />} />
           </Route>
           {/* ADMIN ROUTES */}
           <Route
-          // element={
-          // <ProtectedRoute
-          //   isAuthenticated={true}
-          //   adminRoute={true}
-          //   isAdmin={true}
-          // />
-          // }
+            element={
+              <ProtectedRoute
+                isAuthenticated={user ? true : false}
+                adminOnly={true}
+                admin={user?.role === "admin" ? true : false}
+              />
+            }
           >
             <Route path="/admin/dashboard" element={<Dashboard />} />
             <Route path="/admin/product" element={<Products />} />
@@ -80,9 +119,10 @@ const App = () => {
               element={<TransactionManagement />}
             />
           </Route>
-          ;
+          <Route path="*" element={<NotFound />} />
         </Routes>
       </Suspense>
+      <Toaster position="top-center" />
     </Router>
   );
 };

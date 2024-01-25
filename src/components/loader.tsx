@@ -1,9 +1,26 @@
-import React from 'react'
-
-const Loarder = () => {
+const Loader = () => {
   return (
-    <div>Loarder</div>
-  )
+    <section className="loader">
+      <div></div>
+    </section>
+  );
+};
+
+export default Loader;
+
+interface SkeletonProps {
+  width?: string;
+  length?: number;
 }
 
-export default Loarder
+export const Skeleton = ({ width = "unset", length = 5 }: SkeletonProps) => {
+  const skeletions = Array.from({ length }, (_, idx) => (
+    <div key={idx} className="skeleton-shape"></div>
+  ));
+
+  return (
+    <div className="skeleton-loader" style={{ width }}>
+      {skeletions}
+    </div>
+  );
+};
