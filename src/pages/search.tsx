@@ -1,17 +1,15 @@
 import { useState } from "react";
+import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { Skeleton } from "../components/loader";
 import { ProductCard } from "../components/product-card";
-import { FaSearch } from "react-icons/fa";
 import {
   useCategoriesQuery,
   useSearchProductsQuery,
 } from "../redux/api/productAPI";
-import toast from "react-hot-toast";
-import { CustomError } from "../types/api-types";
-import { server } from "../redux/store";
-import { Skeleton } from "../components/loader";
-import { CartItem } from "../types/types";
 import { addToCart } from "../redux/reducer/cartReducer";
-import { useDispatch } from "react-redux";
+import { CustomError } from "../types/api-types";
+import { CartItem } from "../types/types";
 
 const Search = () => {
   const {

@@ -8,21 +8,6 @@ import { CustomError } from "../../../types/api-types";
 import toast from "react-hot-toast";
 import { getLastMonths } from "../../../utils/feature";
 
-const months = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "Aug",
-  "Sept",
-  "Oct",
-  "Nov",
-  "Dec",
-];
-
 const Barcharts = () => {
   const { last12Months, last6Months } = getLastMonths();
   const { user } = useSelector((state: RootState) => state.userReducer);

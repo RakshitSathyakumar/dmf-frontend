@@ -10,7 +10,7 @@ import { getLastMonths } from "../../../utils/feature";
 
 
 const Linecharts = () => {
-  const { last12Months, last6Months } = getLastMonths();
+  const { last12Months } = getLastMonths();
   const { user } = useSelector((state: RootState) => state.userReducer);
 
   const { isLoading, data, isError, error } = useLineQuery(user?._id!);
