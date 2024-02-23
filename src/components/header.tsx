@@ -1,39 +1,40 @@
+import { signOut } from "firebase/auth";
 import { useState } from "react";
+import toast from "react-hot-toast";
 import {
+  FaHome,
   FaSearch,
   FaShoppingBag,
   FaSignInAlt,
   FaSignOutAlt,
-  FaUser,
-  FaUserAlt,
+  FaUser
 } from "react-icons/fa";
 import { Link } from "react-router-dom";
-import { User } from "../types/types";
-import { signOut } from "firebase/auth";
 import { auth } from "../firebase";
-import toast from "react-hot-toast";
+import { User } from "../types/types";
 
-interface PropsType{
-  user:User | null;
+interface PropsType {
+  user: User | null;
 }
 
-const Header = ({user}:PropsType) => {
-  // const user=;
+const Header = ({ user }: PropsType) => {
   const [isOpen, setIsOpen] = useState<boolean>(false);
-  const logouthandeler = async() => {
+  const logouthandeler = async () => {
     try {
       await signOut(auth);
-      toast.success("Signed Out!")
+      toast.success("Signed Out!");
       setIsOpen(false);
     } catch (error) {
-      toast.error("SignOut Failed!")
+      toast.error("SignOut Failed!");
     }
   };
   return (
     <nav className="header">
       <main>
         <Link onClick={() => setIsOpen(() => false)} to={"/"}>
-          Home
+          <Link to={'/'}>
+            <FaHome />
+          </Link>
         </Link>
       </main>
       <Link onClick={() => setIsOpen(() => false)} to={"/search"}>

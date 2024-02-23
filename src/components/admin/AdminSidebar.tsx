@@ -17,6 +17,8 @@ import {
 import { Link, Location, useLocation } from "react-router-dom";
 import { IconType } from "react-icons";
 
+import image from '../../assets/images/LOGO.jpg'
+
 const AdminSidebar = () => {
   const location = useLocation();
 
@@ -59,7 +61,9 @@ const AdminSidebar = () => {
             : {}
         }
       >
-        <h2>Logo.</h2>
+        <Link to={"/"}>
+          <img src={image} height={100} width={250} alt="Logo" />
+        </Link>
         <DivOne location={location} />
         <DivTwo location={location} />
         <DivThree location={location} />
