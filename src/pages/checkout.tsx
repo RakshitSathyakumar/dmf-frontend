@@ -15,9 +15,7 @@ import { NewOrderRequest } from "../types/api-types";
 import { resetCart } from "../redux/reducer/cartReducer";
 import { responseToast } from "../utils/feature";
 
-const stripePromise = loadStripe(
-  "pk_test_51OXoRsSHhp3ZPWJ3pvsuCH8BmIAxLLJ9RdI4m9403oaWaKNLpQrfebLeujP0J3JQnSNMOB7Bk0bk3U9PNEuRCOKG00FQZHAq6W"
-);
+const stripePromise = loadStripe(import.meta.env.VITE_STRIPE_KEY);
 
 const CheckOutForm = () => {
   const stripe = useStripe();
