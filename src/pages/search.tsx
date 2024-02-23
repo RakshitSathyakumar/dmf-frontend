@@ -42,7 +42,6 @@ const Search = () => {
   const {
     isLoading: productLoading,
     data: searchedData,
-    isError: productIsError,
     error: productError,
   } = useSearchProductsQuery({
     search,
