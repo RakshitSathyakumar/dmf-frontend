@@ -36,16 +36,21 @@ const NewProduct = () => {
     }
   };
 
-  const submitHandler = async (e: FormEvent<HTMLInputElement>) => {
+  const submitHandler = async (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+
     if (!name || !price || stock < 0 || !category || !photo) return;
+
     const formData = new FormData();
+
     formData.set("name", name);
     formData.set("price", price.toString());
     formData.set("stock", stock.toString());
     formData.set("photo", photo);
     formData.set("category", category);
+
     const res = await newProduct({ id: user?._id!, formData });
+
     responseToast(res, navigate, "/admin/product");
   };
 

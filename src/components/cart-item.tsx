@@ -16,7 +16,7 @@ const CartItem = ({
   removeHandler,
   decrementHandler,
 }: cartItemProps) => {
-  const { photo, productId, name, price, quantity, stock } = cartItem;
+  const { photo, productId, name, price, quantity } = cartItem;
   return (
     <div className="cart-item">
       <img src={`${server}/${photo}`} alt={name} />
