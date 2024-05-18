@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import { server } from "../redux/store";
 import { CartItem } from "../types/types";
 
+
 type cartItemProps = {
   cartItem: CartItem;
   incrementHandler: (cartItem: CartItem) => void;

@@ -17,14 +17,14 @@ const Home = () => {
       return toast.error("Out of Stock!!");
     }
     dispatch(addToCart(cartItems));
-    toast.success("Item Added!")
+    toast.success("Item Added!");
   };
   if (isError) toast.error("Cannot Fetch from the server");
   return (
     <div className="home">
       <section> </section>
       <h1>
-        Latest Products
+        Trending Products
         <Link to={"/search"} className="findmore">
           more
         </Link>

@@ -22,7 +22,6 @@ export const orderApi = createApi({
       }),
       invalidatesTags: ["orders"],
     }),
-
     updateOrder: builder.mutation<MessageResponse, UpdateOrderRequest>({
       query: ({ userId, orderId }) => ({
         url: `${orderId}?id=${userId}`,
@@ -30,7 +29,6 @@ export const orderApi = createApi({
       }),
       invalidatesTags: ["orders"],
     }),
-
     deleteOrder: builder.mutation<MessageResponse, UpdateOrderRequest>({
       query: ({ userId, orderId }) => ({
         url: `${orderId}?id=${userId}`,
@@ -38,25 +36,16 @@ export const orderApi = createApi({
       }),
       invalidatesTags: ["orders"],
     }),
-
     myOrders: builder.query<AllOrdersResponse, string>({
-      query: (id) => ({
-        url: `my?id=${id}`,
-      }),
+      query: (id) => `my?id=${id}`,
       providesTags: ["orders"],
     }),
-
     allOrders: builder.query<AllOrdersResponse, string>({
-      query: (id) => ({
-        url: `all?id=${id}`,
-      }),
+      query: (id) => `all?id=${id}`,
       providesTags: ["orders"],
     }),
-
     orderDetails: builder.query<OrderDetailsResponse, string>({
-      query: (id) => ({
-        url: id,
-      }),
+      query: (id) => id,
       providesTags: ["orders"],
     }),
   }),

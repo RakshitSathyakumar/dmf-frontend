@@ -17,6 +17,14 @@ export type Product = {
   _id: string;
 };
 
+export type ShippingInfo = {
+  address: string;
+  city: string;
+  state: string;
+  country: string;
+  pinCode: string;
+};
+
 export type CartItem = {
   productId: string;
   photo: string;
@@ -41,14 +49,6 @@ export type Order = {
     _id: string;
   };
   _id: string;
-};
-
-export type ShippingInfo = {
-  address: string;
-  city: string;
-  state: string;
-  country: string;
-  pinCode: string;
 };
 
 type CountAndChange = {
@@ -121,7 +121,6 @@ export type Bar = {
   products: number[];
   orders: number[];
 };
-
 export type Line = {
   users: number[];
   products: number[];
