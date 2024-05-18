@@ -12,8 +12,8 @@ import { useStatsQuery } from "../../redux/api/dashBoard";
 import { RootState } from "../../redux/store";
 import { getLastMonths } from "../../utils/feature";
 
-const userImg =
-  "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJxA5cTf-5dh5Eusm0puHbvAhOrCRPtckzjA&usqp";
+// const userImg =
+//   "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcSJxA5cTf-5dh5Eusm0puHbvAhOrCRPtckzjA&usqp";
 
 const Dashboard = () => {
   const { last6Months } = getLastMonths();
