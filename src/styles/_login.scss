@@ -1,5 +1,5 @@
 .login {
-    height: 90vh;
+    height: 900vh;
     @include flex(column);
   
     > main {
@@ -34,6 +34,7 @@
           border: 1px solid rgb(62, 125, 242);
           border-radius: 5px;
           font-size: 1.05rem;
+          cursor: pointer;
           > svg {
             background-color: white;
             width: 30%;
@@ -46,5 +47,26 @@
           }
         }
       }
+    }
+  }
+
+  .newLoginbutton {
+    width: 70%;
+    margin: auto;
+    height: 3rem;
+    @include btn(unset, rgb(62, 125, 242), white);
+    @include flex;
+    border: 1px solid rgb(62, 125, 242);
+    border-radius: 5px;
+    font-size: 1.05rem;
+    > svg {
+      background-color: white;
+      width: 30%;
+      height: 100%;
+    }
+
+    > span {
+      width: 100%;
+      text-align: center;
     }
   }
