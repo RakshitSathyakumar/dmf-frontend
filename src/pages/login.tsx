@@ -5,7 +5,7 @@ import toast from "react-hot-toast";
 import { FaCalendar, FaGenderless } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { useDispatch } from "react-redux";
-import { Navigate, useNavigate } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 import { auth } from "../firebase";
 import { getUser, useLoginMutation } from "../redux/api/userAPI";
 import { userExist, userNotExist } from "../redux/reducer/userReducer";
@@ -39,13 +39,13 @@ const Login = () => {
       if ("data" in res) {
         toast.success(res.data.message);
         const data = await getUser(user.uid);
-        <Navigate to ='/' />
+        <Navigate to="/" />;
         dispatch(userExist(data?.user!));
       } else {
         const error = res.error as FetchBaseQueryError;
         const message = (error.data as MessageResponse).message;
         toast.error(message);
-        <Navigate to ='/' />
+        <Navigate to="/" />;
         dispatch(userNotExist());
       }
     } catch (error) {
@@ -53,7 +53,7 @@ const Login = () => {
     }
   };
 
-  const switchTabs = (e: any, tab: string) => {
+  const switchTabs = (tab: string) => {
     if (tab === "login") {
       switcherTab.current?.classList.add("shiftToNeutral");
       switcherTab.current?.classList.remove("shiftToRight");
@@ -76,8 +76,8 @@ const Login = () => {
         <div className="LoginSignUpBox">
           <div>
             <div className="login_signUp_toggle">
-              <p onClick={(e) => switchTabs(e, "login")}>LOGIN</p>
-              <p onClick={(e) => switchTabs(e, "register")}>REGISTER</p>
+              <p onClick={() => switchTabs("login")}>LOGIN</p>
+              <p onClick={() => switchTabs("register")}>REGISTER</p>
             </div>
             <button
               ref={switcherTab as React.RefObject<HTMLButtonElement>}
