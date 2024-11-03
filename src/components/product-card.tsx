@@ -1,10 +1,13 @@
-import { FaPlus } from "react-icons/fa";
-import { server } from "../redux/store";
+import { FaExpandAlt, FaPlus } from "react-icons/fa";
 import { CartItem } from "../types/types";
+import { Link } from "react-router-dom";
 
 type ProductsProps = {
   productId: string;
-  photo: string;
+  photos: {
+    public_id: string;
+    url: string;
+  }[];
   name: string;
   price: number;
   stock: number;
@@ -13,7 +16,7 @@ type ProductsProps = {
 
 export const ProductCard = ({
   productId,
-  photo,
+  photos,
   name,
   price,
   stock,
@@ -21,17 +24,28 @@ export const ProductCard = ({
 }: ProductsProps) => {
   return (
     <div className="product-card">
-      <img src={`${server}/${photo}`} alt={name} />
+      <img src={photos[0].url} alt={name} />
       <p>{name}</p>
       <span>₹{price}</span>
       <div>
         <button
           onClick={() =>
-            handler({ productId, photo, name, price, stock, quantity: 1 })
+            handler({
+              productId,
+              photo: photos[0].url,
+              name,
+              price,
+              stock,
+              quantity: 1,
+            })
           }
         >
           <FaPlus />
         </button>
+        <Link to={`/product/${productId}`}>
+          {" "}
+          <FaExpandAlt />{" "}
+        </Link>
       </div>
     </div>
   );

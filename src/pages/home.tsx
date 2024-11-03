@@ -36,7 +36,7 @@ const Home = () => {
           data?.products.map((i) => (
             <ProductCard
               name={i.name}
-              photo={i.photo}
+              photos={i.photos}
               price={i.price}
               stock={i.stock}
               handler={addToCartHandler}

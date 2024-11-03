@@ -1,16 +1,15 @@
 import { ReactElement, useEffect, useState } from "react";
+import toast from "react-hot-toast";
 import { FaPlus } from "react-icons/fa";
+import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
 import { Column } from "react-table";
 import AdminSidebar from "../../components/admin/AdminSidebar";
 import TableHOC from "../../components/admin/TableHOC";
-import { useAllProductsQuery } from "../../redux/api/productAPI";
-import { server } from "../../redux/store";
-import toast from "react-hot-toast";
-import { CustomError } from "../../types/api-types";
-import { useSelector } from "react-redux";
-import { UserReducerInitialState } from "../../types/reducer-types";
 import { Skeleton } from "../../components/loader";
+import { useAllProductsQuery } from "../../redux/api/productAPI";
+import { CustomError } from "../../types/api-types";
+import { UserReducerInitialState } from "../../types/reducer-types";
 
 interface DataType {
   photo: ReactElement;
@@ -57,7 +56,7 @@ const Products = () => {
     if (data)
       setRows(
         data.products.map((i) => ({
-          photo: <img src={`${server}/${i.photo}`} />,
+          photo: <img src={i.photos[0].url} />,
           name: i.name,
           price: i.price,
           stock: i.stock,
