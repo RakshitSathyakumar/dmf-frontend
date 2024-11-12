@@ -1,10 +1,13 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import {
   AllProductsResponse,
+  AllReviewsResponse,
   CategoriesResponse,
   DeleteProductRequest,
+  DeleteReviewRequest,
   MessageResponse,
   NewProductRequest,
+  NewReviewRequest,
   ProductResponse,
   SearchProductsRequest,
   SearchProductsResponse,
@@ -16,31 +19,19 @@ export const productAPI = createApi({
   baseQuery: fetchBaseQuery({
     baseUrl: `${import.meta.env.VITE_SERVER}/api/v1/product/`,
   }),
-  tagTypes: ["products"],
+  tagTypes: ["product"],
   endpoints: (builder) => ({
     latestProducts: builder.query<AllProductsResponse, string>({
-      query: () => ({
-        url: "latest",
-      }),
-      providesTags: ["products"],
+      query: () => "latest",
+      providesTags: ["product"],
     }),
     allProducts: builder.query<AllProductsResponse, string>({
-      query: (id) => ({
-        url: `admin-products?id=${id}`,
-      }),
-      providesTags: ["products"],
-    }),
-    productDetails: builder.query<ProductResponse, string>({
-      query: (id) => ({
-        url: id,
-      }),
-      providesTags: ["products"],
+      query: (id) => `admin-products?id=${id}`,
+      providesTags: ["product"],
     }),
     categories: builder.query<CategoriesResponse, string>({
-      query: () => ({
-        url: `categories`,
-      }),
-      providesTags: ["products"],
+      query: () => `categories`,
+      providesTags: ["product"],
     }),
 
     searchProducts: builder.query<
@@ -56,25 +47,55 @@ export const productAPI = createApi({
 
         return base;
       },
-      providesTags: ["products"],
+      providesTags: ["product"],
+    }),
+
+    productDetails: builder.query<ProductResponse, string>({
+      query: (id) => id,
+      providesTags: ["product"],
+    }),
+
+    allReviewsOfProducts: builder.query<AllReviewsResponse, string>({
+      query: (productId) => `reviews/${productId}`,
+      providesTags: ["product"],
+    }),
+
+    newReview: builder.mutation<MessageResponse, NewReviewRequest>({
+      query: ({ comment, rating, productId, userId }) => ({
+        url: `review/new/${productId}?id=${userId}`,
+        method: "POST",
+        body: { comment, rating },
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }),
+      invalidatesTags: ["product"],
+    }),
+
+    deleteReview: builder.mutation<MessageResponse, DeleteReviewRequest>({
+      query: ({ reviewId, userId }) => ({
+        url: `/review/${reviewId}?id=${userId}`,
+        method: "DELETE",
+      }),
+      invalidatesTags: ["product"],
     }),
 
     newProduct: builder.mutation<MessageResponse, NewProductRequest>({
-      query: ({ id, formData }) => ({
-        url: `new?$id=${id}`,
-        body: formData,
+      query: ({ formData, id }) => ({
+        url: `new?id=${id}`,
         method: "POST",
+        body: formData,
       }),
-      invalidatesTags: ["products"],
+      invalidatesTags: ["product"],
     }),
 
     updateProduct: builder.mutation<MessageResponse, UpdateProductRequest>({
       query: ({ formData, userId, productId }) => ({
         url: `${productId}?id=${userId}`,
-        body: formData,
         method: "PUT",
+        body: formData,
       }),
-      invalidatesTags: ["products"],
+      invalidatesTags: ["product"],
     }),
 
     deleteProduct: builder.mutation<MessageResponse, DeleteProductRequest>({
@@ -82,7 +103,7 @@ export const productAPI = createApi({
         url: `${productId}?id=${userId}`,
         method: "DELETE",
       }),
-      invalidatesTags: ["products"],
+      invalidatesTags: ["product"],
     }),
   }),
 });
@@ -90,10 +111,13 @@ export const productAPI = createApi({
 export const {
   useLatestProductsQuery,
   useAllProductsQuery,
+  useAllReviewsOfProductsQuery,
   useCategoriesQuery,
   useSearchProductsQuery,
-  useProductDetailsQuery,
+  useNewReviewMutation,
+  useDeleteReviewMutation,
   useNewProductMutation,
+  useProductDetailsQuery,
   useUpdateProductMutation,
   useDeleteProductMutation,
 } = productAPI;

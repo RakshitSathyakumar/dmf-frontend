@@ -1,5 +1,5 @@
+import axios from "axios";
 import { useEffect, useState } from "react";
-import toast from "react-hot-toast";
 import { VscError } from "react-icons/vsc";
 import { useDispatch, useSelector } from "react-redux";
 import { Link } from "react-router-dom";
@@ -9,36 +9,32 @@ import {
   calculatePrice,
   discountApplied,
   removeCartItem,
+  saveCoupon,
 } from "../redux/reducer/cartReducer";
-import { CartReducerInitialState } from "../types/reducer-types";
+import { RootState, server } from "../redux/store";
 import { CartItem } from "../types/types";
-import axios from "axios";
-import { server } from "../redux/store";
 
 const Cart = () => {
   const { cartItems, subtotal, tax, total, shippingCharges, discount } =
-    useSelector(
-      (state: { cartReducer: CartReducerInitialState }) => state.cartReducer
-    );
-  const [couponCode, setCouponCode] = useState<string>("");
-  const [isValidcouponCode, setIsValidCouponCode] = useState<boolean>(false);
+    useSelector((state: RootState) => state.cartReducer);
   const dispatch = useDispatch();
 
-  const incrementHandler = (cartItems: CartItem) => {
-    if (cartItems.quantity >= cartItems.stock)
-      return toast.error("No More Units Left!!");
-    dispatch(addToCart({ ...cartItems, quantity: cartItems.quantity + 1 }));
-  };
+  const [couponCode, setCouponCode] = useState<string>("");
+  const [isValidCouponCode, setIsValidCouponCode] = useState<boolean>(false);
 
-  const decrementHandler = (cartItems: CartItem) => {
-    if (cartItems.quantity <= 1) return toast.error("Min Quantity has to 1");
-    dispatch(addToCart({ ...cartItems, quantity: cartItems.quantity - 1 }));
-  };
+  const incrementHandler = (cartItem: CartItem) => {
+    if (cartItem.quantity >= cartItem.stock) return;
 
+    dispatch(addToCart({ ...cartItem, quantity: cartItem.quantity + 1 }));
+  };
+  const decrementHandler = (cartItem: CartItem) => {
+    if (cartItem.quantity <= 1) return;
+
+    dispatch(addToCart({ ...cartItem, quantity: cartItem.quantity - 1 }));
+  };
   const removeHandler = (productId: string) => {
     dispatch(removeCartItem(productId));
   };
-
   useEffect(() => {
     const { token: cancelToken, cancel } = axios.CancelToken.source();
 
@@ -48,8 +44,9 @@ const Cart = () => {
           cancelToken,
         })
         .then((res) => {
+          console.log(res.data)
           dispatch(discountApplied(res.data.discount));
-          console.log(res.data);
+          dispatch(saveCoupon(couponCode));
           setIsValidCouponCode(true);
           dispatch(calculatePrice());
         })
@@ -77,44 +74,47 @@ const Cart = () => {
         {cartItems.length > 0 ? (
           cartItems.map((i, idx) => (
             <CartItemCard
-              key={idx}
               incrementHandler={incrementHandler}
               decrementHandler={decrementHandler}
               removeHandler={removeHandler}
+              key={idx}
               cartItem={i}
             />
           ))
         ) : (
-          <h1>No Items in Cart </h1>
+          <h1>No Items Added</h1>
         )}
       </main>
       <aside>
-        <p>Subtotal : ₹{subtotal}</p>
-        <p>Shipping Charges : ₹{shippingCharges}</p>
-        <p>Tax : ₹{tax}</p>
-        <em className="red">Discount : -₹{discount}</em>
-        <p>Total : ₹{total}</p>
+        <p>Subtotal: ₹{subtotal}</p>
+        <p>Shipping Charges: ₹{shippingCharges}</p>
+        <p>Tax: ₹{tax}</p>
+        <p>
+          Discount: <em className="red"> - ₹{discount}</em>
+        </p>
+        <p>
+          <b>Total: ₹{total}</b>
+        </p>
+
         <input
           type="text"
+          placeholder="Coupon Code"
           value={couponCode}
           onChange={(e) => setCouponCode(e.target.value)}
-          placeholder="Coupon Code"
         />
+
         {couponCode &&
-          (isValidcouponCode ? (
+          (isValidCouponCode ? (
             <span className="green">
-              {discount} off using <code>{couponCode}</code>
+              ₹{discount} off using the <code>{couponCode}</code>
             </span>
           ) : (
             <span className="red">
               Invalid Coupon <VscError />
             </span>
           ))}
-        {cartItems.length > 0 ? (
-          <Link to={"/shipping"}>chekout</Link>
-        ) : (
-          <Link to={"/search"}>No Items</Link>
-        )}
+
+        {cartItems.length > 0 && <Link to="/shipping">Checkout</Link>}
       </aside>
     </div>
   );

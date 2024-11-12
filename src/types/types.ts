@@ -13,12 +13,26 @@ export type Product = {
   price: number;
   stock: number;
   category: string;
-  description:string;
-  ratings:number;
+  ratings: number;
+  numOfReviews: number;
+  description: string;
   photos: {
-    public_id:string,
-    url:string
+    url: string;
+    public_id: string;
   }[];
+  _id: string;
+};
+
+export type Review = {
+  rating: number;
+  comment: string;
+  product: string;
+  user: {
+    name: string;
+    photo: string;
+    _id: string;
+  };
+  verifiedPurchase: boolean;
   _id: string;
 };
 
@@ -131,4 +145,10 @@ export type Line = {
   products: number[];
   discount: number[];
   revenue: number[];
+};
+
+export type CouponType = {
+  code: string;
+  amount: number;
+  _id: string;
 };

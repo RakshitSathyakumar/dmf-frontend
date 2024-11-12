@@ -10,7 +10,7 @@ import { RootState } from "../redux/store";
 import { CustomError } from "../types/api-types";
 
 type DataType = {
-  _id: string;
+  name: string;
   amount: number;
   quantity: number;
   discount: number;
@@ -20,8 +20,8 @@ type DataType = {
 
 const column: Column<DataType>[] = [
   {
-    Header: "ID",
-    accessor: "_id",
+    Header: "Name",
+    accessor: "name",
   },
   {
     Header: "Quantity",
@@ -49,7 +49,7 @@ const Orders = () => {
   const { user } = useSelector((state: RootState) => state.userReducer);
   // console.log(user);
   const { isLoading, data, isError, error } = useMyOrdersQuery(user?._id!);
-  // console.log(useMyOrdersQuery(user?._id!));
+  console.log(useMyOrdersQuery(user?._id!));
   const [rows, setRows] = useState<DataType[]>([]);
 
   if (isError) {
@@ -61,7 +61,7 @@ const Orders = () => {
     if (data)
       setRows(
         data.orders.map((i) => ({
-          _id: i._id,
+          name: i.user.name,
           amount: i.total,
           discount: i.discount,
           quantity: i.orderItems.length,

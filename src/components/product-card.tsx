@@ -1,12 +1,12 @@
 import { FaExpandAlt, FaPlus } from "react-icons/fa";
-import { CartItem } from "../types/types";
 import { Link } from "react-router-dom";
+import { CartItem } from "../types/types";
 
 type ProductsProps = {
   productId: string;
   photos: {
-    public_id: string;
     url: string;
+    public_id: string;
   }[];
   name: string;
   price: number;
@@ -14,11 +14,11 @@ type ProductsProps = {
   handler: (cartItem: CartItem) => string | undefined;
 };
 
-export const ProductCard = ({
+const ProductCard = ({
   productId,
-  photos,
-  name,
   price,
+  name,
+  photos,
   stock,
   handler,
 }: ProductsProps) => {
@@ -27,14 +27,15 @@ export const ProductCard = ({
       <img src={photos[0].url} alt={name} />
       <p>{name}</p>
       <span>₹{price}</span>
+
       <div>
         <button
           onClick={() =>
             handler({
               productId,
-              photo: photos[0].url,
-              name,
               price,
+              name,
+              photo: photos[0].url,
               stock,
               quantity: 1,
             })
@@ -42,11 +43,13 @@ export const ProductCard = ({
         >
           <FaPlus />
         </button>
+
         <Link to={`/product/${productId}`}>
-          {" "}
-          <FaExpandAlt />{" "}
+          <FaExpandAlt />
         </Link>
       </div>
     </div>
   );
 };
+
+export default ProductCard;

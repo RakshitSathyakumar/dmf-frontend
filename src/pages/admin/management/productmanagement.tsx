@@ -116,7 +116,11 @@ const Productmanagement = () => {
                 showThumbnails
                 showNav={false}
                 onClick={() => setCarouselOpen(true)}
-                images={data?.product?.photos.map((i) => transformImage(i.url)) || []}
+                images={
+                  data?.product?.photos.map((i) =>
+                    transformImage(i.url, 1500)
+                  ) || []
+                }
               />
               <p>{name}</p>
               {stock > 0 ? (
@@ -184,6 +188,7 @@ const Productmanagement = () => {
                   <label>Photo</label>
                   <input
                     type="file"
+                    accept="image/*"
                     multiple
                     onChange={photosFiles.changeHandler}
                   />

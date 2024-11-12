@@ -7,10 +7,9 @@ import {
   useOrderDetailsQuery,
   useUpdateOrderMutation,
 } from "../../../redux/api/orderAPI";
-import { server } from "../../../redux/store";
 import { UserReducerInitialState } from "../../../types/reducer-types";
 import { Order, OrderItem } from "../../../types/types";
-import { responseToast } from "../../../utils/feature";
+import { responseToast, transformImage } from "../../../utils/feature";
 
 const defaultData: Order = {
   shippingInfo: {
@@ -88,7 +87,7 @@ const TransactionManagement = () => {
             <ProductCard
               key={i._id}
               name={i.name}
-              photo={`${server}/${i.photo}`}
+              photo={transformImage(i.photo,500)}
               productId={i.productId}
               _id={i._id}
               quantity={i.quantity}
