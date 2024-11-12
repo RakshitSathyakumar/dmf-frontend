@@ -3,6 +3,7 @@ import { Suspense, lazy, useEffect } from "react";
 import { Toaster } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { Route, BrowserRouter as Router, Routes } from "react-router-dom";
+import Footer from "./components/footer";
 import Header from "./components/header";
 import Loarder from "./components/loader";
 import ProtectedRoute from "./components/protected-routes";
@@ -11,7 +12,6 @@ import NotFound from "./pages/not-found";
 import { getUser } from "./redux/api/userAPI";
 import { userExist, userNotExist } from "./redux/reducer/userReducer";
 import { UserReducerInitialState } from "./types/reducer-types";
-import Footer from "./components/footer";
 
 const Home = lazy(() => import("./pages/home"));
 const Search = lazy(() => import("./pages/search"));
@@ -48,7 +48,7 @@ const TransactionManagement = lazy(
 );
 
 const App = () => {
-  const { user, loading } = useSelector(
+  const { user } = useSelector(
     (state: { userReducer: UserReducerInitialState }) => state.userReducer
   );
   const dispatch = useDispatch();
@@ -64,8 +64,9 @@ const App = () => {
       }
     });
   }, []);
-
-  return loading ? (
+  console.log(user, "==user");
+  const isLoading = false;
+  return isLoading ? (
     <Loarder />
   ) : (
     <Router>

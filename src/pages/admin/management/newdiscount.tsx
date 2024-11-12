@@ -1,11 +1,9 @@
-import axios from "axios";
 import { FormEvent, useState } from "react";
-import toast from "react-hot-toast";
 import { useSelector } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import AdminSidebar from "../../../components/admin/AdminSidebar";
-import { RootState, server } from "../../../redux/store";
 import { useCouponDetailMutation } from "../../../redux/api/paymentAPI";
+import { RootState } from "../../../redux/store";
 import { responseToast } from "../../../utils/feature";
 
 const NewCoupon = () => {

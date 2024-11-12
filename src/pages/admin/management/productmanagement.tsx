@@ -1,4 +1,5 @@
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { Slider, useFileHandler } from "6pp";
+import { FormEvent, useEffect, useState } from "react";
 import { FaTrash } from "react-icons/fa";
 import { useSelector } from "react-redux";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
@@ -11,7 +12,6 @@ import {
 } from "../../../redux/api/productAPI";
 import { UserReducerInitialState } from "../../../types/reducer-types";
 import { responseToast, transformImage } from "../../../utils/feature";
-import { Slider, useFileHandler } from "6pp";
 
 const Productmanagement = () => {
   const { user } = useSelector(
@@ -21,16 +21,14 @@ const Productmanagement = () => {
   const navigate = useNavigate();
   const { data, isLoading, isError } = useProductDetailsQuery(params.id!);
 
-  const { price, photos, name, stock, category, description } =
-    data?.product || {
-      photos: [],
-      category: "",
-      name: "",
-      stock: 0,
-      price: 0,
-      _id: "",
-      description: "",
-    };
+  const { price, name, stock, category, description } = data?.product || {
+    category: "",
+    name: "",
+    stock: 0,
+    price: 0,
+    _id: "",
+    description: "",
+  };
 
   const [updateProduct] = useUpdateProductMutation();
   const [deleteProduct] = useDeleteProductMutation();
@@ -115,7 +113,7 @@ const Productmanagement = () => {
               <Slider
                 showThumbnails
                 showNav={false}
-                onClick={() => setCarouselOpen(true)}
+                onClick={() => setCarouselOpen(carouselOpen)}
                 images={
                   data?.product?.photos.map((i) =>
                     transformImage(i.url, 1500)

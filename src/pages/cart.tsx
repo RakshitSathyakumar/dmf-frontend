@@ -72,7 +72,7 @@ const Cart = () => {
     <div className="cart">
       <main>
         {cartItems.length > 0 ? (
-          cartItems.map((i, idx) => (
+          cartItems.map((i:any, idx:any) => (
             <CartItemCard
               incrementHandler={incrementHandler}
               decrementHandler={decrementHandler}

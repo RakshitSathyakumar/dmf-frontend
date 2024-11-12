@@ -1,7 +1,6 @@
 import { FaTrash } from "react-icons/fa";
 import { Link } from "react-router-dom";
 import { CartItem } from "../types/types";
-import { transformImage } from "../utils/feature";
 
 type CartItemProps = {
   cartItem: CartItem;

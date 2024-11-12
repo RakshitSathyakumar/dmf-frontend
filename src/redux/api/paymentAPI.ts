@@ -1,8 +1,6 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 import {
-  AllCouponsResponse,
-  MessageResponse,
-  NewCouponsRequest,
+  MessageResponse
 } from "../../types/api-types";
 
 export const paymentAPI = createApi({
@@ -12,7 +10,7 @@ export const paymentAPI = createApi({
   }),
   tagTypes: ["payment"],
   endpoints: (builder) => ({
-    allCoupons: builder.query<AllCouponsResponse, string>({
+    allCoupons: builder.query<any, string>({
       query: (id) => ({
         url: `coupon/all?id=${id}`,
       }),
@@ -28,7 +26,7 @@ export const paymentAPI = createApi({
     }),
 
 
-    couponDetail: builder.mutation<MessageResponse, NewCouponsRequest>({
+    couponDetail: builder.mutation<MessageResponse, any>({
       query: ({ id, coupon, amount }) => ({
         url: `coupon/new?id=${id}`,
         method: "POST",

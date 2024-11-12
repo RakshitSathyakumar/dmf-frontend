@@ -56,7 +56,7 @@ const Transaction = () => {
   const [rows, setRows] = useState<DataType[]>([]);
 
   if (isError) toast.error((error as CustomError).data.message);
-  const res = data?.orders.map((i)=>console.log(i.user.name));
+  // const res = data?.orders.map((i)=>console.log(i.user.name));
   
 
   useEffect(() => {

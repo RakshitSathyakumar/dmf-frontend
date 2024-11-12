@@ -2,7 +2,6 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { Skeleton } from "../components/loader";
-import { ProductCard } from "../components/product-card";
 import {
   useCategoriesQuery,
   useSearchProductsQuery,
@@ -10,8 +9,11 @@ import {
 import { addToCart } from "../redux/reducer/cartReducer";
 import { CustomError } from "../types/api-types";
 import { CartItem } from "../types/types";
+import ProductCard from "../components/product-card";
+import { useSearchParams } from "react-router-dom";
 
 const Search = () => {
+  const searchQuery = useSearchParams()[0];
   const {
     data: categoriesResponse,
     isLoading: loadingCategories,
@@ -33,7 +35,7 @@ const Search = () => {
   const [search, setSearch] = useState("");
   const [sort, setSort] = useState("");
   const [maxPrice, setMaxPrice] = useState(100000);
-  const [category, setCategory] = useState("");
+  const [category, setCategory] = useState(searchQuery.get("category") || "");
   const [page, setPage] = useState(1);
 
   const isPrevPage = page > 1;

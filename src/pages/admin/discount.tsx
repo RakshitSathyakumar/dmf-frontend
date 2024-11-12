@@ -62,7 +62,7 @@ const Discount = () => {
   useEffect(() => {
     if (coupons)
       setRows(
-        coupons.map((i) => ({
+        coupons.map((i:any) => ({
           _id: i._id,
           code: i.coupon,
           amount: i.amount,
